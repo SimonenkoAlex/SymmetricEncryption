@@ -51,6 +51,8 @@
             this.labelHitIndex = new System.Windows.Forms.Label();
             this.hitIndex = new System.Windows.Forms.TextBox();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.keyLength = new System.Windows.Forms.TextBox();
+            this.labelKeyLength = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tBCounter)).BeginInit();
@@ -277,6 +279,25 @@
             this.dataGridView2.Size = new System.Drawing.Size(350, 180);
             this.dataGridView2.TabIndex = 9;
             // 
+            // keyLength
+            // 
+            this.keyLength.BackColor = System.Drawing.Color.MistyRose;
+            this.keyLength.Location = new System.Drawing.Point(119, 292);
+            this.keyLength.Name = "keyLength";
+            this.keyLength.Size = new System.Drawing.Size(100, 20);
+            this.keyLength.TabIndex = 4;
+            // 
+            // labelKeyLength
+            // 
+            this.labelKeyLength.AutoSize = true;
+            this.labelKeyLength.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelKeyLength.ForeColor = System.Drawing.Color.Maroon;
+            this.labelKeyLength.Location = new System.Drawing.Point(12, 293);
+            this.labelKeyLength.Name = "labelKeyLength";
+            this.labelKeyLength.Size = new System.Drawing.Size(101, 19);
+            this.labelKeyLength.TabIndex = 3;
+            this.labelKeyLength.Text = "Длина ключа:";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -292,8 +313,10 @@
             this.Controls.Add(this.btnEncode);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.btnDecode);
+            this.Controls.Add(this.keyLength);
             this.Controls.Add(this.hitIndex);
             this.Controls.Add(this.textKey);
+            this.Controls.Add(this.labelKeyLength);
             this.Controls.Add(this.labelHitIndex);
             this.Controls.Add(this.keyword);
             this.Controls.Add(this.numLatters);
@@ -340,6 +363,8 @@
         private System.Windows.Forms.Label labelHitIndex;
         private System.Windows.Forms.TextBox hitIndex;
         private System.Windows.Forms.DataGridView dataGridView2;
+        private System.Windows.Forms.TextBox keyLength;
+        private System.Windows.Forms.Label labelKeyLength;
     }
 }
 

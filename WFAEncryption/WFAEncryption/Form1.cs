@@ -13,15 +13,18 @@ namespace WFAEncryption
 {
     public partial class MainForm : Form
     {
+        private const float RUS_MI = 0.0553f;
+        private const float ENG_MI = 0.0644f;
+        private const int ENG = 26, RUS = 32;
+
         private static int offset;          // сдвиг
         private static char[] alphabet;     // алфавит
-        private static int[] index;         // кол-во буквы в тексте
         private static float[] freq;        // относительная частота
         private static int N;               // мощность алфавита
         private static int i = 0, j = 0;    // переменные цикла
-        private static int ENG = 26, RUS = 32;
         private static string method = "Vigenere";
-        
+        private static float constMI;
+
 
         public MainForm()
         {
@@ -32,25 +35,23 @@ namespace WFAEncryption
             if (radioBtnEng.Checked)
             {
                 tBCounter.Maximum = ENG;
+                constMI = ENG_MI;
                 alphabet = new char[] { ' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
                                             'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
                                             'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
                 N = alphabet.Length;
-                index = new int[N];
-                for (int i = 0; i < N; index[i++] = 0) { }
                 freq = new float[N];
                 for (int i = 0; i < N; freq[i++] = 0) { }
             }
             if (radioBtnRus.Checked)
             {
                 tBCounter.Maximum = RUS;
+                constMI = RUS_MI;
                 alphabet = new char[] { ' ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И',
                                             'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т',
                                             'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ь', 'Ы', 'Ъ',
                                             'Э', 'Ю', 'Я' };
                 N = alphabet.Length;
-                index = new int[N];
-                for (int i = 0; i < N; index[i++] = 0) { }
                 freq = new float[N];
                 for (int i = 0; i < N; freq[i++] = 0) { }
             }
@@ -211,12 +212,16 @@ namespace WFAEncryption
                 {
                     tBCounter.Visible = false; numLatters.Visible = false;
                     textKey.Visible = true; keyword.Visible = true;
+                    labelKeyLength.Visible = true; keyLength.Visible = true;
+                    labelHitIndex.Visible = true; hitIndex.Visible = true;
                     method = "Vigenere";
                 }
                 if (radioButton.Text == "шифр Цезаря")
                 {
                     tBCounter.Visible = true; numLatters.Visible = true;
                     textKey.Visible = false; keyword.Visible = false;
+                    labelKeyLength.Visible = false; keyLength.Visible = false;
+                    labelHitIndex.Visible = false; hitIndex.Visible = false;
                     method = "Caesar";
                 }
             }
@@ -311,10 +316,11 @@ namespace WFAEncryption
         private string Decode_Vigenere(string input)
         {
             string result = "";             // выходная строка
-            int keyLeng = 2;                // предполагаемая длина ключа
+            int keyLeng;                    // предполагаемая длина ключа
             int n = input.Length;           // длина исходного текста
-            float matchIndex = 0f;          // общий индекс совпадений
-            float[] matInd = new float[n];  // частные индексы совпадений
+            int n0 = 0;                     // длина временного текста
+            float ind1 = 0f;                // индекс совпадений
+            int[] ind = new int[n];         // кол-во i-ой буквы в тексте
             string teststr = "";            // временная строка
             // Создаем таблицу относительных частот букв в тексте
             DataTable dt = new DataTable();
@@ -325,24 +331,47 @@ namespace WFAEncryption
             DataTable mi = new DataTable();
             mi.Columns.Add("Длина ключа");
             mi.Columns.Add("Индекс совпадений");
+            ind = matchSearch(input);
+            for (j = 0; j < N; j++)
+                freq[j] = (float)ind[j] / n;
+            for (i = 0; i < N; i++)
+                dt.Rows.Add(i, alphabet[i], freq[i]);
+            dataGridView1.DataSource = dt;
+            char[] charInput = input.ToCharArray();
+            for (keyLeng = 2; keyLeng < 40; keyLeng++)
+            {
+                teststr = ""; ind1 = 0f;    // обнулить переменную
+                for (i = 0; i < n; i += keyLeng)
+                    teststr += charInput[i];
+                ind = matchSearch(teststr);
+                n0 = teststr.Length;
+                for (j = 0; j < N; j++)
+                    ind1 += (float)(ind[j] * (ind[j] - 1)) / (n0 * (n0 - 1));
+                //Console.WriteLine("{0} - {1}", keyLeng, Math.Round(ind1, 4));
+                if (Math.Round(ind1, 4) >= constMI) break;
+            }
+            keyLength.Text = keyLeng.ToString();
+            hitIndex.Text = ind1.ToString();
+            for (j = 0; j < keyLeng; j++)
+            {
+                for (i = j; i < n - j; i += keyLeng) { }
+            }
+            return result;
+        }
+
+        private int[] matchSearch(string text)
+        {
+            int[] index = new int[text.Length];
+            i = 0; // обнулить индекс
             foreach (char symbolABC in alphabet)
             {   // перебор символов алфавита и исходного текста
-                foreach (char symbolText in input)
+                foreach (char symbolText in text)
                 {   // и подсчёт количества совпадений
                     if (symbolABC == symbolText) index[i]++;
                 }
                 i++;
             }
-            for (j = 0; j < N; j++)
-            {
-                freq[j] = (float)index[j] / n;
-                matchIndex += (float)(index[j] * (index[j] - 1)) / (n * (n - 1));
-            }
-            for (i = 0; i < N; i++)
-                dt.Rows.Add(i, alphabet[i], freq[i]);
-            dataGridView1.DataSource = dt;
-            hitIndex.Text = matchIndex.ToString();
-            return result;
+            return index;
         }
     }
 }
