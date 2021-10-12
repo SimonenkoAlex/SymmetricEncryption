@@ -37,8 +37,8 @@ namespace WFAEncryption
                 tBCounter.Maximum = ENG;
                 constMI = ENG_MI;
                 alphabet = new char[] { ' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
-                                            'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-                                            'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+                                        'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
+                                        'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
                 N = alphabet.Length;
                 freq = new float[N];
                 for (int i = 0; i < N; freq[i++] = 0) { }
@@ -48,9 +48,9 @@ namespace WFAEncryption
                 tBCounter.Maximum = RUS;
                 constMI = RUS_MI;
                 alphabet = new char[] { ' ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И',
-                                            'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т',
-                                            'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ь', 'Ы', 'Ъ',
-                                            'Э', 'Ю', 'Я' };
+                                        'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т',
+                                        'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ы', 'Ь',
+                                        'Э', 'Ю', 'Я' };
                 N = alphabet.Length;
                 freq = new float[N];
                 for (int i = 0; i < N; freq[i++] = 0) { }
@@ -88,42 +88,12 @@ namespace WFAEncryption
         private string Encode_Caesar(string input)
         {
             string result = "";
-            char latter;
-            bool flag;
+            int keyNumber = Convert.ToInt32(numLatters.Text);
 
             foreach (char symbol in input)
             {
-                flag = false; //обработан ли текущий символ
-                if (symbol >= 'A' && symbol <= 'Z')
-                {
-                    latter = Convert.ToChar(symbol + (offset % ENG));
-                    if (latter > 'Z') latter = Convert.ToChar('A' + (latter - 'Z') - 1);
-                    result += latter;
-                    flag = true;
-                }
-                if (symbol >= 'a' && symbol <= 'z')
-                {
-                    latter = Convert.ToChar(symbol + (offset % ENG));
-                    if (latter > 'z') latter = Convert.ToChar('a' + (latter - 'z') - 1);
-                    result += latter;
-                    flag = true;
-                }
-                if (symbol >= 'А' && symbol <= 'Я')
-                {
-                    latter = Convert.ToChar(symbol + (offset % RUS));
-                    if (latter > 'Я') latter = Convert.ToChar('А' + (latter - 'Я') - 1);
-                    result += latter;
-                    flag = true;
-                }
-                if (symbol >= 'а' && symbol <= 'я')
-                {
-                    latter = Convert.ToChar(symbol + (offset % RUS));
-                    if (latter > 'я') latter = Convert.ToChar('а' + (latter - 'я') - 1);
-                    result += latter;
-                    flag = true;
-                }
-                if (!flag) result += symbol;
-                
+                int c = (Array.IndexOf(alphabet, symbol) + keyNumber) % N;
+                result += alphabet[c];
             }
             return result;
         }
@@ -134,38 +104,17 @@ namespace WFAEncryption
             {
                 case "Caesar":
                     {
-                        string s;
-
-                        StreamReader sr = new StreamReader(@"Text\input.txt", Encoding.GetEncoding(1251));
-                        StreamWriter sw = new StreamWriter(@"Text\output.txt");
-
-                        while (!sr.EndOfStream)
-                        {
-                            s = sr.ReadLine();
-                            sw.WriteLine(Encode_Caesar(s));
-                        }
-
-                        sr.Close();
-                        sw.Close();
+                        string text = originalText.Text.ToString().ToUpper();
+                        cipherText.Text = Encode_Caesar(text).ToLower();
                         break;
                     }
                 case "Vigenere":
                     {
-                        if (textKey.Text.Length > 0)
+                        string keyword = textKey.Text;
+                        if (keyword.Length > 0)
                         {
-                            string s;
-
-                            StreamReader sr = new StreamReader(@"Text\input.txt");
-                            StreamWriter sw = new StreamWriter(@"Text\output.txt");
-
-                            while (!sr.EndOfStream)
-                            {
-                                s = sr.ReadLine();
-                                sw.WriteLine(Encode_Vigenere(s, textKey.Text));
-                            }
-
-                            sr.Close();
-                            sw.Close();
+                            string text = originalText.Text.ToString().ToUpper();
+                            cipherText.Text = Encode_Vigenere(text, keyword).ToLower();
                         }
                         else MessageBox.Show("Введите ключевое слово!");
                         break;
@@ -178,26 +127,15 @@ namespace WFAEncryption
             switch (method)
             {
                 case "Caesar":
-                    {
-                        string s;
-
-                        StreamReader sr = new StreamReader(@"Text\input.txt", Encoding.GetEncoding(1251));
-                        StreamWriter sw = new StreamWriter(@"Text\output.txt");
-
-                        while (!sr.EndOfStream)
-                        {
-                            s = sr.ReadLine();
-                            sw.WriteLine(Decode_Caesar(s));
-                        }
-
-                        sr.Close();
-                        sw.Close();
+                    {   // расшифровать текст метода Цезаря
+                        string text = originalText.Text.ToString().ToUpper();
+                        cipherText.Text = Decode_Caesar(text).ToLower();
                         break;
                     }
                 case "Vigenere":
-                    { // реализация метода, расшифровывающего строку методом Виженера
+                    {   // расшифровать текст метода Виженера
                         string text = originalText.Text.ToString().ToUpper();
-                        cipherText.Text = Decode_Vigenere(text);
+                        cipherText.Text = Decode_Vigenere(text).ToLower();
                         break;
                     }
             }
@@ -245,7 +183,7 @@ namespace WFAEncryption
                     tBCounter.Maximum = RUS;
                     alphabet = new char[] { ' ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И',
                                             'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т',
-                                            'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ь', 'Ы', 'Ъ',
+                                            'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ы', 'Ь',
                                             'Э', 'Ю', 'Я' };
                     N = alphabet.Length;
                 }
@@ -270,45 +208,52 @@ namespace WFAEncryption
         // зашифрованной методом Цезаря
         private string Decode_Caesar(string input)
         {
-            string result = ""; // выходная строка
-            char latter;
-            bool flag;
+            string result = "";             // выходная строка
+            int keyNumber = 0;              // предполагаемая длина ключа
+            int n = input.Length;           // длина исходного текста
+            float saveFreq = 0f;
+            int[] count = new int[n];       // кол-во i-ой буквы в тексте
+            DataTable freqTable;
+            String[] freqColumns = { "№ буквы", "Буква", "Кол-во", "Относ. частота" };
 
-            foreach (char symbol in input)
+            // Создаем таблицу индекса совпадений для длин ключа
+            freqTable = creatTable(freqColumns);
+
+            char[] charInput = input.ToCharArray();
+            count = matchSearch(input);
+            for (i = 0; i < N; i++)
             {
-                flag = false; //обработан ли текущий символ
-                if (symbol >= 'A' && symbol <= 'Z')
+                freq[i] = (float)count[i] / n;
+                freqTable.Rows.Add(i, alphabet[i], count[i], freq[i]);
+                if (saveFreq <= freq[i])
                 {
-                    latter = Convert.ToChar(symbol - (offset % ENG));
-                    if (latter < 'A') latter = Convert.ToChar('A' - (latter - 'Z') - 1);
-                    result += latter;
-                    flag = true;
+                    saveFreq = freq[i];
+                    if (Math.Round(freq[i], 3) >= 0.1)
+                    {
+                        keyNumber = Array.IndexOf(alphabet, alphabet[i]);
+                    }
                 }
-                if (symbol >= 'a' && symbol <= 'z')
-                {
-                    latter = Convert.ToChar(symbol - (offset % ENG));
-                    if (latter < 'a') latter = Convert.ToChar('a' - (latter - 'z') - 1);
-                    result += latter;
-                    flag = true;
-                }
-                if (symbol >= 'А' && symbol <= 'Я')
-                {
-                    latter = Convert.ToChar(symbol - (offset % RUS));
-                    if (latter < 'А') latter = Convert.ToChar('А' - (latter - 'Я') - 1);
-                    result += latter;
-                    flag = true;
-                }
-                if (symbol >= 'а' && symbol <= 'я')
-                {
-                    latter = Convert.ToChar(symbol - (offset % RUS));
-                    if (latter < 'а') latter = Convert.ToChar('а' - (latter - 'я') - 1);
-                    result += latter;
-                    flag = true;
-                }
-                if (!flag) result += symbol;
+            }
+            dataGridView2.DataSource = freqTable;
+            numLatters.Text = keyNumber.ToString();
 
+            int firstSymbol = 0, subSumbol = 0;
+            for (i = 0; i < n; i++)
+            {
+                firstSymbol = Array.IndexOf(alphabet, charInput[i]);
+                subSumbol = (firstSymbol - keyNumber) % N;
+                if (subSumbol < 0) result += alphabet[N + subSumbol];
+                else result += alphabet[subSumbol];
             }
             return result;
+        }
+
+        DataTable creatTable(String[] nameColumns)
+        {
+            DataTable table = new DataTable();
+            for (i = 0; i < nameColumns.Length; i++)
+                table.Columns.Add(nameColumns[i]);
+            return table;
         }
 
         // реализация метода расшифровки строки 
@@ -316,46 +261,91 @@ namespace WFAEncryption
         private string Decode_Vigenere(string input)
         {
             string result = "";             // выходная строка
-            int keyLeng;                    // предполагаемая длина ключа
+            int len, keyLeng;               // предполагаемая длина ключа
             int n = input.Length;           // длина исходного текста
             int n0 = 0;                     // длина временного текста
             float ind1 = 0f;                // индекс совпадений
             int[] ind = new int[n];         // кол-во i-ой буквы в тексте
             string teststr = "";            // временная строка
+            DataTable freqTable, indexTable;
+            String[] freqColumns = { "№ слова", "№ буквы", "Буква", "Относ. частота" };
+            String[] indexColumns = { "Длина ключа", "Индекс совпадений" };
+
             // Создаем таблицу относительных частот букв в тексте
-            DataTable dt = new DataTable();
-            dt.Columns.Add("№ п/п");
-            dt.Columns.Add("Буква");
-            dt.Columns.Add("Относит. частота");
+            freqTable = creatTable(freqColumns);
+
             // Создаем таблицу индекса совпадений для длин ключа
-            DataTable mi = new DataTable();
-            mi.Columns.Add("Длина ключа");
-            mi.Columns.Add("Индекс совпадений");
-            ind = matchSearch(input);
-            for (j = 0; j < N; j++)
-                freq[j] = (float)ind[j] / n;
-            for (i = 0; i < N; i++)
-                dt.Rows.Add(i, alphabet[i], freq[i]);
-            dataGridView1.DataSource = dt;
+            indexTable = creatTable(indexColumns);
+
             char[] charInput = input.ToCharArray();
             for (keyLeng = 2; keyLeng < 40; keyLeng++)
-            {
-                teststr = ""; ind1 = 0f;    // обнулить переменную
+            {   // цикл поиска ключа
+                teststr = ""; ind1 = 0f;
                 for (i = 0; i < n; i += keyLeng)
                     teststr += charInput[i];
                 ind = matchSearch(teststr);
                 n0 = teststr.Length;
                 for (j = 0; j < N; j++)
                     ind1 += (float)(ind[j] * (ind[j] - 1)) / (n0 * (n0 - 1));
-                //Console.WriteLine("{0} - {1}", keyLeng, Math.Round(ind1, 4));
+                indexTable.Rows.Add(keyLeng, ind1);
                 if (Math.Round(ind1, 4) >= constMI) break;
             }
+            dataGridView1.DataSource = indexTable;
+
             keyLength.Text = keyLeng.ToString();
             hitIndex.Text = ind1.ToString();
+            //originalText.Text = "";
+            string[] splitText = new string[keyLeng];
+            char[] key = new char[keyLeng];
+            char[] resultText = new char[n];
+            string keyWord = "";
+            float saveFreq = 0f;
             for (j = 0; j < keyLeng; j++)
             {
-                for (i = j; i < n - j; i += keyLeng) { }
+                for (i = j; i < n; i += keyLeng)
+                {
+                    splitText[j] += charInput[i];
+                }
+                //originalText.Text += String.Format("{0} >- {1}\n", j, splitText[j]).ToLower();
+                ind = matchSearch(splitText[j]);
+                len = splitText[j].Length;
+                for (i = 0; i < N; i++)
+                {
+                    freq[i] = (float)ind[i] / len;
+                    freqTable.Rows.Add(j + 1, i, alphabet[i], freq[i]);
+                    if (saveFreq <= freq[i])
+                    {
+                        saveFreq = freq[i];
+                        if (Math.Round(freq[i], 3) >= 0.1)
+                        {
+                            key[j] = ' ';
+                            int c = Array.IndexOf(alphabet, alphabet[i]);
+                            key[j] = alphabet[c];
+                        }
+                    }
+                }
+                keyWord += key[j];
+                saveFreq = 0f;
             }
+            dataGridView2.DataSource = freqTable;
+
+            int firstSymbol = 0, secondSymbol = 0, subSumbol = 0;
+            for (j = 0; j < keyLeng; j++)
+            {
+                for (i = j; i < n; i += keyLeng)
+                {
+                    firstSymbol = Array.IndexOf(alphabet, charInput[i]);
+                    secondSymbol = Array.IndexOf(alphabet, key[j]);
+                    subSumbol = (firstSymbol - secondSymbol) % N;
+                    if (subSumbol < 0) resultText[i] = alphabet[N + subSumbol];
+                    else resultText[i] = alphabet[subSumbol];
+                }
+            }
+            for (i = 0; i < n; i++)
+            {
+                result += resultText[i];
+            }
+            textKey.Text = keyWord.ToLower();
             return result;
         }
 

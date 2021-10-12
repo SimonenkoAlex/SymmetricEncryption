@@ -30,6 +30,7 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioBtnVigenere = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioBtnCaesar = new System.Windows.Forms.RadioButton();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.radioBtnRus = new System.Windows.Forms.RadioButton();
@@ -63,11 +64,12 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.radioBtnVigenere);
+            this.groupBox1.Controls.Add(this.radioButton1);
             this.groupBox1.Controls.Add(this.radioBtnCaesar);
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(280, 60);
+            this.groupBox1.Size = new System.Drawing.Size(550, 60);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Метод шифрования";
@@ -76,7 +78,7 @@
             // 
             this.radioBtnVigenere.AutoSize = true;
             this.radioBtnVigenere.Checked = true;
-            this.radioBtnVigenere.Location = new System.Drawing.Point(135, 26);
+            this.radioBtnVigenere.Location = new System.Drawing.Point(128, 24);
             this.radioBtnVigenere.Name = "radioBtnVigenere";
             this.radioBtnVigenere.Size = new System.Drawing.Size(139, 23);
             this.radioBtnVigenere.TabIndex = 0;
@@ -85,10 +87,21 @@
             this.radioBtnVigenere.UseVisualStyleBackColor = true;
             this.radioBtnVigenere.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(273, 25);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(273, 23);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.Text = "шифр одноалфавитной подстановки";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
+            // 
             // radioBtnCaesar
             // 
             this.radioBtnCaesar.AutoSize = true;
-            this.radioBtnCaesar.Location = new System.Drawing.Point(7, 26);
+            this.radioBtnCaesar.Location = new System.Drawing.Point(8, 25);
             this.radioBtnCaesar.Name = "radioBtnCaesar";
             this.radioBtnCaesar.Size = new System.Drawing.Size(114, 23);
             this.radioBtnCaesar.TabIndex = 0;
@@ -101,9 +114,9 @@
             this.groupBox2.Controls.Add(this.radioBtnRus);
             this.groupBox2.Controls.Add(this.radioBtnEng);
             this.groupBox2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox2.Location = new System.Drawing.Point(299, 12);
+            this.groupBox2.Location = new System.Drawing.Point(576, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(270, 60);
+            this.groupBox2.Size = new System.Drawing.Size(220, 60);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Язык";
@@ -112,7 +125,7 @@
             // 
             this.radioBtnRus.AutoSize = true;
             this.radioBtnRus.Checked = true;
-            this.radioBtnRus.Location = new System.Drawing.Point(161, 27);
+            this.radioBtnRus.Location = new System.Drawing.Point(118, 25);
             this.radioBtnRus.Name = "radioBtnRus";
             this.radioBtnRus.Size = new System.Drawing.Size(81, 23);
             this.radioBtnRus.TabIndex = 0;
@@ -124,7 +137,7 @@
             // radioBtnEng
             // 
             this.radioBtnEng.AutoSize = true;
-            this.radioBtnEng.Location = new System.Drawing.Point(6, 27);
+            this.radioBtnEng.Location = new System.Drawing.Point(6, 25);
             this.radioBtnEng.Name = "radioBtnEng";
             this.radioBtnEng.Size = new System.Drawing.Size(106, 23);
             this.radioBtnEng.TabIndex = 0;
@@ -246,10 +259,11 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(576, 13);
+            this.dataGridView1.Location = new System.Drawing.Point(576, 80);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(350, 250);
+            this.dataGridView1.Size = new System.Drawing.Size(220, 615);
             this.dataGridView1.TabIndex = 8;
             // 
             // labelHitIndex
@@ -266,6 +280,7 @@
             // hitIndex
             // 
             this.hitIndex.BackColor = System.Drawing.Color.MistyRose;
+            this.hitIndex.Enabled = false;
             this.hitIndex.Location = new System.Drawing.Point(403, 292);
             this.hitIndex.Name = "hitIndex";
             this.hitIndex.Size = new System.Drawing.Size(160, 20);
@@ -273,15 +288,17 @@
             // 
             // dataGridView2
             // 
+            this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(576, 270);
+            this.dataGridView2.Location = new System.Drawing.Point(12, 456);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(350, 180);
+            this.dataGridView2.Size = new System.Drawing.Size(550, 240);
             this.dataGridView2.TabIndex = 9;
             // 
             // keyLength
             // 
             this.keyLength.BackColor = System.Drawing.Color.MistyRose;
+            this.keyLength.Enabled = false;
             this.keyLength.Location = new System.Drawing.Point(119, 292);
             this.keyLength.Name = "keyLength";
             this.keyLength.Size = new System.Drawing.Size(100, 20);
@@ -303,7 +320,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.ClientSize = new System.Drawing.Size(934, 462);
+            this.ClientSize = new System.Drawing.Size(814, 712);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.labelCipherText);
@@ -365,6 +382,7 @@
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.TextBox keyLength;
         private System.Windows.Forms.Label labelKeyLength;
+        private System.Windows.Forms.RadioButton radioButton1;
     }
 }
 
