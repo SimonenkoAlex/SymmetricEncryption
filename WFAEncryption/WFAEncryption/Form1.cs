@@ -14,47 +14,30 @@ namespace WFAEncryption
     public partial class MainForm : Form
     {
         private const float RUS_MI = 0.0553f;
-        private const float ENG_MI = 0.0644f;
-        private const int ENG = 26, RUS = 32;
+        private const int RUS = 32;
 
         private static int offset;          // сдвиг
         private static char[] alphabet;     // алфавит
         private static float[] freq;        // относительная частота
         private static int N;               // мощность алфавита
         private static int i = 0, j = 0;    // переменные цикла
-        private static string method = "Vigenere";
+        private static string method = null;
         private static float constMI;
 
 
         public MainForm()
         {
             InitializeComponent();
-            btnDecode.Enabled = false;
-            btnEncode.Enabled = false;
             openFileDialog1.Filter = "Text files(*.txt)|*.txt|All files(*.*)|*.*";
-            if (radioBtnEng.Checked)
-            {
-                tBCounter.Maximum = ENG;
-                constMI = ENG_MI;
-                alphabet = new char[] { ' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
-                                        'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-                                        'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-                N = alphabet.Length;
-                freq = new float[N];
-                for (int i = 0; i < N; freq[i++] = 0) { }
-            }
-            if (radioBtnRus.Checked)
-            {
-                tBCounter.Maximum = RUS;
-                constMI = RUS_MI;
-                alphabet = new char[] { ' ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И',
-                                        'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т',
-                                        'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ы', 'Ь',
-                                        'Э', 'Ю', 'Я' };
-                N = alphabet.Length;
-                freq = new float[N];
-                for (int i = 0; i < N; freq[i++] = 0) { }
-            }
+            tBCounter.Maximum = RUS;
+            constMI = RUS_MI;
+            alphabet = new char[] {
+                ' ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'Й',
+                'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф',
+                'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ы', 'Ь', 'Э', 'Ю', 'Я' };
+            N = alphabet.Length;
+            freq = new float[N];
+            for (int i = 0; i < N; freq[i++] = 0) { }
         }
 
         private void tBCounter_ValueChanged(object sender, EventArgs e)
@@ -100,94 +83,96 @@ namespace WFAEncryption
 
         private void btnEncode_Click(object sender, EventArgs e)
         {
-            switch (method)
+            if (originalText.Text.Equals("")) MessageBox.Show("Текстовое поле пустое!");
+            else
             {
-                case "Caesar":
-                    {
-                        string text = originalText.Text.ToString().ToUpper();
-                        cipherText.Text = Encode_Caesar(text).ToLower();
-                        break;
-                    }
-                case "Vigenere":
-                    {
-                        string keyword = textKey.Text;
-                        if (keyword.Length > 0)
+                switch (method)
+                {
+                    case "Caesar":
                         {
                             string text = originalText.Text.ToString().ToUpper();
-                            cipherText.Text = Encode_Vigenere(text, keyword).ToLower();
+                            cipherText.Text = Encode_Caesar(text).ToLower();
+                            break;
                         }
-                        else MessageBox.Show("Введите ключевое слово!");
-                        break;
-                    }
+                    case "Vigenere":
+                        {
+                            string keyword = textKey.Text;
+                            if (keyword.Length > 0)
+                            {
+                                string text = originalText.Text.ToString().ToUpper();
+                                cipherText.Text = Encode_Vigenere(text, keyword).ToLower();
+                            }
+                            else MessageBox.Show("Введите ключевое слово!");
+                            break;
+                        }
+                }
             }
         }
 
         private void btnDecode_Click(object sender, EventArgs e)
         {
-            switch (method)
+            if (originalText.Text.Equals("")) MessageBox.Show("Текстовое поле пустое!");
+            else
             {
-                case "Caesar":
-                    {   // расшифровать текст метода Цезаря
-                        string text = originalText.Text.ToString().ToUpper();
-                        cipherText.Text = Decode_Caesar(text).ToLower();
-                        break;
-                    }
-                case "Vigenere":
-                    {   // расшифровать текст метода Виженера
-                        string text = originalText.Text.ToString().ToUpper();
-                        cipherText.Text = Decode_Vigenere(text).ToLower();
-                        break;
-                    }
+                switch (method)
+                {
+                    case "Caesar":
+                        {   // расшифровать текст метода Цезаря
+                            string text = originalText.Text.ToString().ToUpper();
+                            cipherText.Text = Decode_Caesar(text).ToLower();
+                            break;
+                        }
+                    case "Vigenere":
+                        {   // расшифровать текст метода Виженера
+                            string text = originalText.Text.ToString().ToUpper();
+                            cipherText.Text = Decode_Vigenere(text).ToLower();
+                            break;
+                        }
+                    case "Substitution":
+                        {   // расшифровать текст метода подстановки
+                            string text = originalText.Text.ToString().ToUpper();
+                            cipherText.Text = Decode_Substitution(text).ToLower();
+                            break;
+                        }
+                }
             }
+        }
+
+        private string radioBtn_Checked()
+        {
+            if (radioBtnVigenere.Checked)
+            {
+                tBCounter.Visible = false; numLatters.Visible = false;
+                textKey.Visible = true; keyword.Visible = true;
+                labelKeyLength.Visible = true; keyLength.Visible = true;
+                labelHitIndex.Visible = true; hitIndex.Visible = true;
+                btnEncode.Enabled = true; btnDecode.Enabled = true;
+                return "Vigenere";
+            }
+            if (radioBtnCaesar.Checked)
+            {
+                tBCounter.Visible = true; numLatters.Visible = true;
+                textKey.Visible = false; keyword.Visible = false;
+                labelKeyLength.Visible = false; keyLength.Visible = false;
+                labelHitIndex.Visible = false; hitIndex.Visible = false;
+                btnEncode.Enabled = true; btnDecode.Enabled = true;
+                return "Caesar";
+            }
+            if (radioBtnMonoAlphabet.Checked)
+            {
+                tBCounter.Visible = false; numLatters.Visible = false;
+                textKey.Visible = false; keyword.Visible = false;
+                labelKeyLength.Visible = false; keyLength.Visible = false;
+                labelHitIndex.Visible = false; hitIndex.Visible = false;
+                btnEncode.Enabled = false; btnDecode.Enabled = true;
+                return "Substitution";
+            }
+            return null;
         }
 
         private void radioButton_CheckedChanged(object sender, EventArgs e)
         {
-            RadioButton radioButton = (RadioButton)sender;
-            if (radioButton.Checked)
-            {
-                if (radioButton.Text == "метод Виженера")
-                {
-                    tBCounter.Visible = false; numLatters.Visible = false;
-                    textKey.Visible = true; keyword.Visible = true;
-                    labelKeyLength.Visible = true; keyLength.Visible = true;
-                    labelHitIndex.Visible = true; hitIndex.Visible = true;
-                    method = "Vigenere";
-                }
-                if (radioButton.Text == "шифр Цезаря")
-                {
-                    tBCounter.Visible = true; numLatters.Visible = true;
-                    textKey.Visible = false; keyword.Visible = false;
-                    labelKeyLength.Visible = false; keyLength.Visible = false;
-                    labelHitIndex.Visible = false; hitIndex.Visible = false;
-                    method = "Caesar";
-                }
-            }
-        }
-
-        private void radioBtnLanguage_CheckedChanged(object sender, EventArgs e)
-        {
-            RadioButton radioButton = (RadioButton)sender;
-            if (radioButton.Checked)
-            {
-                if (radioButton.Text == "английский")
-                {
-                    tBCounter.Maximum = ENG;
-                    alphabet = new char[] { ' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
-                                            'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-                                            'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-                    N = alphabet.Length;
-                }
-                if (radioButton.Text == "русский")
-                {
-                    tBCounter.Maximum = RUS;
-                    alphabet = new char[] { ' ', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И',
-                                            'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т',
-                                            'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ы', 'Ь',
-                                            'Э', 'Ю', 'Я' };
-                    N = alphabet.Length;
-                }
-            }
+            method = radioBtn_Checked();
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
@@ -199,9 +184,113 @@ namespace WFAEncryption
             // читаем файл в строку
             string fileText = System.IO.File.ReadAllText(filename);
             originalText.Text = fileText;
-            btnDecode.Enabled = true;
-            btnEncode.Enabled = true;
+            radioBtnVigenere.Enabled = true;
+            radioBtnCaesar.Enabled = true;
+            radioBtnMonoAlphabet.Enabled = true;
+            method = radioBtn_Checked();
             MessageBox.Show("Файл открыт");
+        }
+
+        private string Decode_Substitution(string input)
+        {
+            string result = "";             // выходная строка
+            int n = input.Length;           // длина исходного текста
+            int[] count = new int[n];       // кол-во i-ой буквы в тексте
+            //float maxFreq = 0f;
+            DataTable freqTable;
+            String[] freqColumns = { "№ п/п", "Буква шифротекста",
+                "Кол-во", "Относ. частота", "Буква исходного текста" };
+            char[] alphabetFreq = new char[] {
+                ' ', 'С', 'О', 'Т', 'Е', 'А', 'И', 'Р', 'Н', 'Л', 'У',
+                'В', 'К', 'Д', 'Я', 'П', 'Х', 'Ы', 'Г', 'Ю', 'Ч', 'Ь',
+                'М', 'Ж', 'Б', 'Ф', 'Э', 'Щ', 'Й', 'З', 'Ц', 'Ш' };
+
+            // Создаем таблицу индекса совпадений для длин ключа
+            freqTable = creatTable(freqColumns);
+
+            count = matchSearch(input);
+            for (i = 0; i < N; i++)
+                freq[i] = (float)count[i] / n;
+
+            char[] copyAlphabet = alphabet;
+            for (i = 0; i < N - 1; i++)
+            {
+                for (j = i + 1; j < N; j++)
+                {
+                    if (freq[i] <= freq[j])
+                    {
+                        float tempFreq = freq[i];
+                        freq[i] = freq[j];
+                        freq[j] = tempFreq;
+                        char tempLetter = copyAlphabet[i];
+                        copyAlphabet[i] = copyAlphabet[j];
+                        copyAlphabet[j] = tempLetter;
+                        int tempCount = count[i];
+                        count[i] = count[j];
+                        count[j] = tempCount;
+                    }
+                }
+            }
+
+            for (i = 0; i < N; i++)
+            {
+                for (j = 0; j < N - 1; j++)
+                {
+                    if (freq[j] == freq[j + 1])
+                    {
+                        if (copyAlphabet[j] > copyAlphabet[j + 1])
+                        {
+                            char tempLetter = copyAlphabet[j];
+                            copyAlphabet[j] = copyAlphabet[j + 1];
+                            copyAlphabet[j + 1] = tempLetter;
+                        }
+                    }
+                }
+            }
+
+            for (i = 0; i < N; i++)
+                freqTable.Rows.Add(i + 1, copyAlphabet[i], count[i], Math.Round(freq[i], 3), alphabetFreq[i]);
+            dataGridView2.DataSource = freqTable;
+
+            char[] charInput = input.ToCharArray();
+            for (i = 0; i < n; i++)
+            {
+                for (j = 0; j < N; j++)
+                {
+                    if (charInput[i] == copyAlphabet[j])
+                    {
+                        charInput[i] = alphabetFreq[j];
+                        break;
+                    }
+                }
+            }
+
+            string text = new string(charInput);
+            List<string> l1Char = new List<string>();
+            for (int i = 1; i < text.Length - 1; i++)
+            {
+                if (text[i - 1] == ' ' && text[i + 1] == ' ')
+                    l1Char.Add(text[i].ToString());
+            }
+            Console.WriteLine("Предлоги 1: " + String.Join("; ", l1Char));
+            List<string> l2Char = new List<string>();
+            for (int i = 1; i < text.Length - 2; i++)
+            {
+                if (text[i - 1] == ' ' && text[i + 2] == ' ')
+                    l2Char.Add(String.Concat(text[i], text[i + 1]));
+            }
+            Console.WriteLine("Предлоги 2: " + String.Join("; ", l2Char));
+            List<string> l3Char = new List<string>();
+            for (int i = 1; i < text.Length - 3; i++)
+            {
+                if (text[i - 1] == ' ' && text[i + 3] == ' ')
+                    l3Char.Add(String.Concat(text[i], text[i + 1], text[i + 2]));
+            }
+            Console.WriteLine("Предлоги 3: " + String.Join("; ", l3Char));
+
+            for (i = 0; i < n; i++)
+                result += charInput[i];
+            return result;
         }
 
         // реализация метода расшифровки строки 
@@ -294,7 +383,6 @@ namespace WFAEncryption
 
             keyLength.Text = keyLeng.ToString();
             hitIndex.Text = ind1.ToString();
-            //originalText.Text = "";
             string[] splitText = new string[keyLeng];
             char[] key = new char[keyLeng];
             char[] resultText = new char[n];
@@ -306,7 +394,6 @@ namespace WFAEncryption
                 {
                     splitText[j] += charInput[i];
                 }
-                //originalText.Text += String.Format("{0} >- {1}\n", j, splitText[j]).ToLower();
                 ind = matchSearch(splitText[j]);
                 len = splitText[j].Length;
                 for (i = 0; i < N; i++)
@@ -316,11 +403,12 @@ namespace WFAEncryption
                     if (saveFreq <= freq[i])
                     {
                         saveFreq = freq[i];
-                        if (Math.Round(freq[i], 3) >= 0.1)
+                        if (Math.Round(freq[i], 3) >= 0.090)
                         {
                             key[j] = ' ';
                             int c = Array.IndexOf(alphabet, alphabet[i]);
                             key[j] = alphabet[c];
+                            //break;
                         }
                     }
                 }

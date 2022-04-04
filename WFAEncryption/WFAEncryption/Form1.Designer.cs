@@ -30,11 +30,8 @@
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.radioBtnVigenere = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioBtnMonoAlphabet = new System.Windows.Forms.RadioButton();
             this.radioBtnCaesar = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.radioBtnRus = new System.Windows.Forms.RadioButton();
-            this.radioBtnEng = new System.Windows.Forms.RadioButton();
             this.tBCounter = new System.Windows.Forms.TrackBar();
             this.numLatters = new System.Windows.Forms.Label();
             this.textKey = new System.Windows.Forms.TextBox();
@@ -55,7 +52,6 @@
             this.keyLength = new System.Windows.Forms.TextBox();
             this.labelKeyLength = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tBCounter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
@@ -64,7 +60,7 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.radioBtnVigenere);
-            this.groupBox1.Controls.Add(this.radioButton1);
+            this.groupBox1.Controls.Add(this.radioBtnMonoAlphabet);
             this.groupBox1.Controls.Add(this.radioBtnCaesar);
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox1.Location = new System.Drawing.Point(13, 13);
@@ -78,6 +74,7 @@
             // 
             this.radioBtnVigenere.AutoSize = true;
             this.radioBtnVigenere.Checked = true;
+            this.radioBtnVigenere.Enabled = false;
             this.radioBtnVigenere.Location = new System.Drawing.Point(128, 24);
             this.radioBtnVigenere.Name = "radioBtnVigenere";
             this.radioBtnVigenere.Size = new System.Drawing.Size(139, 23);
@@ -87,20 +84,22 @@
             this.radioBtnVigenere.UseVisualStyleBackColor = true;
             this.radioBtnVigenere.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
-            // radioButton1
+            // radioBtnMonoAlphabet
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(273, 25);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(273, 23);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.Text = "шифр одноалфавитной подстановки";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
+            this.radioBtnMonoAlphabet.AutoSize = true;
+            this.radioBtnMonoAlphabet.Enabled = false;
+            this.radioBtnMonoAlphabet.Location = new System.Drawing.Point(273, 25);
+            this.radioBtnMonoAlphabet.Name = "radioBtnMonoAlphabet";
+            this.radioBtnMonoAlphabet.Size = new System.Drawing.Size(273, 23);
+            this.radioBtnMonoAlphabet.TabIndex = 0;
+            this.radioBtnMonoAlphabet.Text = "шифр одноалфавитной подстановки";
+            this.radioBtnMonoAlphabet.UseVisualStyleBackColor = true;
+            this.radioBtnMonoAlphabet.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
             // 
             // radioBtnCaesar
             // 
             this.radioBtnCaesar.AutoSize = true;
+            this.radioBtnCaesar.Enabled = false;
             this.radioBtnCaesar.Location = new System.Drawing.Point(8, 25);
             this.radioBtnCaesar.Name = "radioBtnCaesar";
             this.radioBtnCaesar.Size = new System.Drawing.Size(114, 23);
@@ -108,42 +107,6 @@
             this.radioBtnCaesar.Text = "шифр Цезаря";
             this.radioBtnCaesar.UseVisualStyleBackColor = true;
             this.radioBtnCaesar.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.radioBtnRus);
-            this.groupBox2.Controls.Add(this.radioBtnEng);
-            this.groupBox2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox2.Location = new System.Drawing.Point(576, 12);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(220, 60);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Язык";
-            // 
-            // radioBtnRus
-            // 
-            this.radioBtnRus.AutoSize = true;
-            this.radioBtnRus.Checked = true;
-            this.radioBtnRus.Location = new System.Drawing.Point(118, 25);
-            this.radioBtnRus.Name = "radioBtnRus";
-            this.radioBtnRus.Size = new System.Drawing.Size(81, 23);
-            this.radioBtnRus.TabIndex = 0;
-            this.radioBtnRus.TabStop = true;
-            this.radioBtnRus.Text = "русский";
-            this.radioBtnRus.UseVisualStyleBackColor = true;
-            this.radioBtnRus.CheckedChanged += new System.EventHandler(this.radioBtnLanguage_CheckedChanged);
-            // 
-            // radioBtnEng
-            // 
-            this.radioBtnEng.AutoSize = true;
-            this.radioBtnEng.Location = new System.Drawing.Point(6, 25);
-            this.radioBtnEng.Name = "radioBtnEng";
-            this.radioBtnEng.Size = new System.Drawing.Size(106, 23);
-            this.radioBtnEng.TabIndex = 0;
-            this.radioBtnEng.Text = "английский";
-            this.radioBtnEng.UseVisualStyleBackColor = true;
-            this.radioBtnEng.CheckedChanged += new System.EventHandler(this.radioBtnLanguage_CheckedChanged);
             // 
             // tBCounter
             // 
@@ -176,6 +139,7 @@
             // 
             // btnDecode
             // 
+            this.btnDecode.Enabled = false;
             this.btnDecode.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnDecode.Location = new System.Drawing.Point(445, 128);
             this.btnDecode.Name = "btnDecode";
@@ -187,6 +151,7 @@
             // 
             // btnEncode
             // 
+            this.btnEncode.Enabled = false;
             this.btnEncode.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.btnEncode.Location = new System.Drawing.Point(314, 128);
             this.btnEncode.Name = "btnEncode";
@@ -261,9 +226,9 @@
             // 
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(576, 80);
+            this.dataGridView1.Location = new System.Drawing.Point(582, 12);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(220, 615);
+            this.dataGridView1.Size = new System.Drawing.Size(220, 440);
             this.dataGridView1.TabIndex = 8;
             // 
             // labelHitIndex
@@ -290,9 +255,9 @@
             // 
             this.dataGridView2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(12, 456);
+            this.dataGridView2.Location = new System.Drawing.Point(822, 12);
             this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(550, 240);
+            this.dataGridView2.Size = new System.Drawing.Size(550, 440);
             this.dataGridView2.TabIndex = 9;
             // 
             // keyLength
@@ -320,7 +285,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.ClientSize = new System.Drawing.Size(814, 712);
+            this.ClientSize = new System.Drawing.Size(1384, 462);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.labelCipherText);
@@ -338,15 +303,12 @@
             this.Controls.Add(this.keyword);
             this.Controls.Add(this.numLatters);
             this.Controls.Add(this.tBCounter);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Симметрическое шифрование";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tBCounter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
@@ -360,15 +322,12 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton radioBtnVigenere;
         private System.Windows.Forms.RadioButton radioBtnCaesar;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TrackBar tBCounter;
         private System.Windows.Forms.Label numLatters;
         private System.Windows.Forms.TextBox textKey;
         private System.Windows.Forms.Button btnDecode;
         private System.Windows.Forms.Button btnEncode;
         private System.Windows.Forms.Label keyword;
-        private System.Windows.Forms.RadioButton radioBtnRus;
-        private System.Windows.Forms.RadioButton radioBtnEng;
         private System.Windows.Forms.RichTextBox originalText;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
@@ -382,7 +341,7 @@
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.TextBox keyLength;
         private System.Windows.Forms.Label labelKeyLength;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioBtnMonoAlphabet;
     }
 }
 
